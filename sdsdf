@@ -1,0 +1,59 @@
+import math
+import numpy as np
+
+def integral(t):
+    return math.e ** (-(t**2))
+
+def left(a, b, n):
+    if a == b:
+        return 0.0
+    fz = np.arange(a, b + (b-a)/n, (b-a)/n)
+    s = 0
+    for x in fz[0:len(fz)-1]:
+        s += integral(x) * (b-a)/n
+    return s
+
+def right(a, b, n):
+    if a == b:
+        return 0.0
+    fz = np.arange(a, b + (b-a)/n, (b-a)/n)
+    s = 0
+    for x in fz[1:]:
+        s += integral(x) * (b-a)/n
+    return s
+
+def middle(a, b, n):
+    if a == b:
+        return 0.0
+    h = (b - a) / n
+    fz = np.arange(a, b, h)
+    s = 0
+    for x in fz:
+        s += integral(x + h/2) * h
+    return s
+
+x_list = [i / 10 for i in range(0, 21)]
+
+print('Метод левых прямоугольников'.center(80))
+print("-" * 80)
+print(f"{'x':<20} {'erf(x)':<20} {'my_erf(x)':<20} {'Отклонение':<20}")
+for x in x_list:
+    a = left(0.0, x, 100) * (2 / math.sqrt(math.pi))
+    print(f"{x:<20} {math.erf(x):<20.6f} {a:<20.6f} {abs(math.erf(x) - a):<20.6f}")
+print("-" * 80)
+print()
+print('Метод правых прямоугольников'.center(80))
+print("-" * 80)
+print(f"{'x':<20} {'erf(x)':<20} {'my_erf(x)':<20} {'Отклонение':<20}")
+for x in x_list:
+    a = right(0.0, x, 100) * (2 / math.sqrt(math.pi))
+    print(f"{x:<20} {math.erf(x):<20.6f} {a:<20.6f} {abs(math.erf(x) - a):<20.6f}")
+print("-" * 80)
+print()
+print('Метод средних прямоугольников'.center(80))
+print("-" * 80)
+print(f"{'x':<20} {'erf(x)':<20} {'my_erf(x)':<20} {'Отклонение':<20}")
+for x in x_list:
+    a = middle(0.0, x, 100) * (2 / math.sqrt(math.pi))
+    print(f"{x:<20} {math.erf(x):<20.6f} {a:<20.6f} {abs(math.erf(x) - a):<20.6f}")
+print("-" * 80)
